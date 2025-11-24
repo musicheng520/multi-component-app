@@ -18,15 +18,29 @@ spec:
         name: mongo
         env:
         - name: MONGODB_ROOT_PASSWORD
-          value: "secret"
+          valueFrom:
+            configMapKeyRef:
+              key: password
+              name: mongodb-config
         - name: MONGODB_ROOT_USER
-          value: "admin"
+          valueFrom:
+            configMapKeyRef:
+              key: username
+              name: mongodb-config
         ports:
         - containerPort: 27017
         volumeMounts:
         - mountPath: /bitnami/mongodb
           name: mongo-volume
+        - mountPath: /bitnami
+          name: mongo-config-test
       volumes:
       - name: mongo-volume
         persistentVolumeClaim:
           claimName: mongo-pvc-sc
+      - name: mongo-config-test
+        configMap:
+          name: mongodb-config
+          items:
+          - key: sample.conf
+            path: test.conf
