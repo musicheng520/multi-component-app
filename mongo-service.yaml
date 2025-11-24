@@ -9,3 +9,5 @@ spec:
     targetPort: 27017
   selector:
     app: mongo-pod
+
+# service for mongo db
